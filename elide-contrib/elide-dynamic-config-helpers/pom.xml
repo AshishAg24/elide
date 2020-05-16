@@ -44,7 +44,6 @@
         <handlebars.version>4.2.0</handlebars.version>
         <json-schema-validator.version>2.2.12</json-schema-validator.version>
         <mdkt.compiler.version>1.3.0</mdkt.compiler.version>
-        <google.collections.version>1.0</google.collections.version>
         <commons-io.version>2.6</commons-io.version>
     </properties>
 
@@ -66,11 +65,11 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
-		<dependency>
-		    <groupId>commons-io</groupId>
-		    <artifactId>commons-io</artifactId>
-		    <version>${commons-io.version}</version>
-		</dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commons-io.version}</version>
+        </dependency>
         <dependency>
         <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -116,9 +115,8 @@
             <version>${mdkt.compiler.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.google.collections</groupId>
-            <artifactId>google-collections</artifactId>
-            <version>${google.collections.version}</version>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
         </dependency>
     </dependencies>
 
