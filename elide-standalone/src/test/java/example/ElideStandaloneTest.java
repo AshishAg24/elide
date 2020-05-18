@@ -27,13 +27,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import com.yahoo.elide.async.service.AsyncQueryDAO;
-import com.yahoo.elide.contrib.swagger.SwaggerBuilder;
-import com.yahoo.elide.contrib.swagger.resources.DocEndpoint;
-import com.yahoo.elide.core.EntityDictionary;
+//import com.yahoo.elide.contrib.swagger.SwaggerBuilder;
+//import com.yahoo.elide.contrib.swagger.resources.DocEndpoint;
+//import com.yahoo.elide.core.EntityDictionary;
 import com.yahoo.elide.standalone.ElideStandalone;
 import com.yahoo.elide.standalone.config.ElideStandaloneSettings;
 
-import com.google.common.collect.Maps;
+//import com.google.common.collect.Maps;
 
 import example.models.Post;
 
@@ -44,11 +44,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 import io.restassured.response.Response;
-import io.swagger.models.Info;
-import io.swagger.models.Swagger;
+//import io.swagger.models.Info;
+//import io.swagger.models.Swagger;
 
-import java.util.ArrayList;
-import java.util.List;
+//import java.util.ArrayList;
+//import java.util.List;
 import java.util.Properties;
 
 import javax.ws.rs.core.MediaType;
@@ -87,18 +87,8 @@ public class ElideStandaloneTest {
             }
 
             @Override
-            public List<DocEndpoint.SwaggerRegistration> enableSwagger() {
-                EntityDictionary dictionary = new EntityDictionary(Maps.newHashMap());
-
-                dictionary.bindEntity(Post.class);
-                Info info = new Info().title("Test Service");
-
-                SwaggerBuilder builder = new SwaggerBuilder(dictionary, info);
-                Swagger swagger = builder.build();
-
-                List<DocEndpoint.SwaggerRegistration> docs = new ArrayList<>();
-                docs.add(new DocEndpoint.SwaggerRegistration("test", swagger));
-                return docs;
+            public boolean enableSwagger() {
+                return true;
             }
 
 
@@ -268,30 +258,20 @@ public class ElideStandaloneTest {
     public void testSwaggerEndpoint() throws Exception {
         given()
                 .when()
-                .get("/swagger/doc/test")
+                .get("/swagger/doc/elide")
                 .then()
                 .statusCode(200);
     }
 
     @Test
     public void swaggerDocumentTest() {
-        /*when()
-               .get("/swagger/doc/test")
+        when()
+               .get("/swagger/doc/elide")
                 .then()
                 .statusCode(200)
-                .body("tags.name", containsInAnyOrder("group", "functionArgument", "metric",
+                .body("tags.name", containsInAnyOrder("post", "functionArgument", "metric",
                         "metricFunction", "dimension", "column", "table", "asyncQuery", "asyncQueryResult",
-                        "timeDimensionGrain", "timeDimension"));*/
-
-        when()
-                .get("/swagger/doc/async")
-                .then()
-                .statusCode(200)
-                .body("tags.name", containsInAnyOrder("asyncQuery", "asyncQueryResult"));
-        when()
-                .get("/api/v1/table")
-                .then()
-                .statusCode(200);
+                        "timeDimensionGrain", "timeDimension", "postView"));
     }
 
     @Test

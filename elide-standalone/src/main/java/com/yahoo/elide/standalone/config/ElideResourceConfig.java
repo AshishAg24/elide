@@ -14,7 +14,7 @@ import com.yahoo.elide.ElideSettings;
 import com.yahoo.elide.async.hooks.ExecuteQueryHook;
 import com.yahoo.elide.async.hooks.UpdatePrincipalNameHook;
 import com.yahoo.elide.async.models.AsyncQuery;
-import com.yahoo.elide.async.models.AsyncQueryResult;
+//import com.yahoo.elide.async.models.AsyncQueryResult;
 import com.yahoo.elide.async.service.AsyncCleanerService;
 import com.yahoo.elide.async.service.AsyncExecutorService;
 import com.yahoo.elide.async.service.AsyncQueryDAO;
@@ -40,13 +40,13 @@ import io.swagger.models.Info;
 import io.swagger.models.Swagger;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.HashMap;
+//import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 import javax.inject.Inject;
-import javax.persistence.Entity;
+//import javax.persistence.Entity;
 import javax.persistence.EntityManagerFactory;
 import javax.servlet.ServletContext;
 import javax.ws.rs.core.Context;
@@ -150,11 +150,15 @@ public class ElideResourceConfig extends ResourceConfig {
         register(new org.glassfish.hk2.utilities.binding.AbstractBinder() {
             @Override
             protected void configure() {
-                List<DocEndpoint.SwaggerRegistration> swaggerDocs = settings.enableSwagger();
-                if (!swaggerDocs.isEmpty()) {
+                //List<DocEndpoint.SwaggerRegistration> swaggerDocs = settings.enableSwagger();
+                EntityDictionary dictionary = injector.getService(EntityDictionary.class);
+
+                if (settings.enableSwagger()) {
+
+                    List<DocEndpoint.SwaggerRegistration> swaggerDocs = settings.buildSwagger(dictionary);
 
                     // Include the metadata models in swagger docs
-                    EntityDictionary dictionary = injector.getService(ElideSettings.class).getDictionary();
+                   /* EntityDictionary dictionary = injector.getService(ElideSettings.class).getDictionary();
 
                     Swagger swagger = setupSwagger(dictionary, settings.getJsonApiPathSpec(), "Metadata models");
 
@@ -186,7 +190,7 @@ public class ElideResourceConfig extends ResourceConfig {
                                 "Dynamic models Service");
 
                             swaggerDocs.add(new DocEndpoint.SwaggerRegistration("dynamic", swagger));
-                        }
+                        }*/
 
                     bind(swaggerDocs).named("swagger").to(new TypeLiteral<List<DocEndpoint.SwaggerRegistration>>() { });
                 }

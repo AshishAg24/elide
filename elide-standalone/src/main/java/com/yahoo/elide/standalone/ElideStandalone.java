@@ -117,7 +117,7 @@ public class ElideStandalone {
             context.addServlet(AdminServlet.class, "/stats/*");
         }
 
-        if (!elideStandaloneSettings.enableSwagger().isEmpty()) {
+        if (elideStandaloneSettings.enableSwagger()) {
             ServletHolder jerseyServlet = context.addServlet(ServletContainer.class,
                     elideStandaloneSettings.getSwaggerPathSpec());
             jerseyServlet.setInitOrder(0);

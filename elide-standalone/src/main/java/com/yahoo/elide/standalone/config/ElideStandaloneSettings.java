@@ -13,6 +13,7 @@ import com.yahoo.elide.async.service.AsyncQueryDAO;
 import com.yahoo.elide.audit.AuditLogger;
 import com.yahoo.elide.audit.Slf4jLogger;
 import com.yahoo.elide.contrib.dynamicconfighelpers.compile.ElideDynamicEntityCompiler;
+import com.yahoo.elide.contrib.swagger.SwaggerBuilder;
 import com.yahoo.elide.contrib.swagger.resources.DocEndpoint;
 import com.yahoo.elide.core.DataStore;
 import com.yahoo.elide.core.EntityDictionary;
@@ -30,6 +31,9 @@ import com.yahoo.elide.security.checks.Check;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.glassfish.hk2.api.ServiceLocator;
 import org.glassfish.jersey.server.ResourceConfig;
+
+import io.swagger.models.Info;
+import io.swagger.models.Swagger;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -247,11 +251,32 @@ public interface ElideStandaloneSettings {
     }
 
     /**
-     * Enable swagger documentation by returning non empty list.
+     * Enable swagger documentation.
+     * @return whether Swagger is enabled;
+     */
+    default boolean enableSwagger() {
+        return false;
+    }
+
+    /**
+     * Creates a singular swagger document for JSON-API.
+     * @param dictionary Contains the static metadata about Elide models. .
      * @return list of swagger registration objects.
      */
-    default List<DocEndpoint.SwaggerRegistration> enableSwagger() {
-        return new ArrayList<>();
+    default List<DocEndpoint.SwaggerRegistration> buildSwagger(EntityDictionary dictionary) {
+        Info info = new Info()
+                .title("Elide Service");
+
+        SwaggerBuilder builder = new SwaggerBuilder(dictionary, info);
+
+        String moduleBasePath = getJsonApiPathSpec().replaceAll("/\\*", "");
+
+        Swagger swagger = builder.build().basePath(moduleBasePath);
+
+        List<DocEndpoint.SwaggerRegistration> docs = new ArrayList<>();
+        docs.add(new DocEndpoint.SwaggerRegistration("elide", swagger));
+
+        return docs;
     }
 
     /**
